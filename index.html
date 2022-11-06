@@ -16,7 +16,11 @@
 </head>
 
 <body>
-    <div id="map"></div>
+    <div id='loadbar' class="w3-light-grey">
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <div id="myBar" style="background-color: green; text-align: center; color: white;" style="height:24px;width:0">LOADING ...</div>
+    </div>
+    <div style="opacity: 0;" id="map"></div>
 
     <!-- 
      The `defer` attribute causes the callback to execute after the full HTML
