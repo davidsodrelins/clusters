@@ -9,6 +9,40 @@ const request = {
   fields: ['name', 'geometry']
 };
 
+function gerarCsv(){
+
+  if(places.length === 0){
+    alert('Nenhum dado para exportar... Tente novamente em alguns segundos.')
+  } else {
+   var csv = 'Id, X, Y, Empresa, Atividade Google, Nota, Qualquer Lugar, Acessibilidade, Publico 1, Publico 2, Preco, Site, Padrao, Redes Sociais\n';
+
+   places.forEach((item) => {
+           csv += item.Id;
+           csv += ','+ item.X;
+           csv += ','+ item.Y;
+           csv += ','+ item.empresa;
+           csv += ','+ item.atividadeGoogle;
+           csv += ','+ item.nota;
+           csv += ','+ item.qualquerLugar;
+           csv += ','+ item.acessibilidade;
+           csv += ','+ item.publico1;
+           csv += ','+ item.publico2;
+           csv += ','+ item.preco;
+           csv += ','+ item.site;
+           csv += ','+ item.padrao;
+           csv += ','+ item.redes_sociais;
+           csv += '\n';
+   });
+ 
+   const data = new Date().toLocaleString();   
+   var hiddenElement = document.createElement('a');
+   hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+   hiddenElement.target = '_blank';
+   hiddenElement.download = 'places-'+data+'.csv';
+   hiddenElement.click();
+  }
+}
+
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: -13.002730, lng: -38.527716 },
@@ -61,3 +95,4 @@ setTimeout(() => {
 }, 10 * 1000);
 
 window.initMap = initMap;
+
