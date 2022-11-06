@@ -1,8 +1,7 @@
 let map;
 let markers = []
 let places = []
-//const types = ['bakery', 'bar', 'cafe', 'liquor_store', 'meal_delivery', 'meal_takeaway', 'night_club', 'restaurant', 'supermarket']
-const types = ['bar', 'restaurant', 'meal_delivery']
+const types = ['bakery', 'bar', 'cafe', 'food', 'meal_delivery', 'meal_takeaway', 'restaurant', 'supermarket']
 const numtypes = types.length
 const request = {
   radius: '800',
@@ -42,6 +41,8 @@ function createPoint(item) {
     position: item.location,
     title: item.name,
     map: map,
+    // icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+    icon: "https://www.iconpacks.net/icons/1/free-pin-icon-48-thumb.png",
   });
   markers.push(marker)
 }
