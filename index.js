@@ -1,8 +1,17 @@
 let map;
 let markers = [];
 let places = [];
+const myStyles = [
+  {
+    featureType: "poi",
+    elementType: "labels",
+    stylers: [
+      { visibility: "off" }
+    ]
+  }
+];
 
-const types = ['bar','meal_delivery','restaurant' ];
+const types = ['bar', 'meal_delivery', 'restaurant'];
 const numtypes = types.length;
 const request = {
   radius: '800',
@@ -44,17 +53,20 @@ function gerarCsv(){
 }
 
 function initMap() {
+
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: -13.002730, lng: -38.527716 },
+    styles: myStyles,
     zoom: 12,
   });
 
-  request.location = new google.maps.LatLng(-13.010652, -38.486895),
+  request.location = new google.maps.LatLng(-13.010652, -38.486895)
 
   buscar();
+  move();
 }
 
-async function searchPlaces(results, status, pagination) {
+function searchPlaces(results, status, pagination) {
   if (status === google.maps.places.PlacesServiceStatus.OK) {
     let _places = [];
     for (var i = 0; i < results.length; i++) {
@@ -67,7 +79,6 @@ async function searchPlaces(results, status, pagination) {
     if (pagination.hasNextPage) {
       pagination.nextPage();
     }
-    new markerClusterer.MarkerClusterer({ markers, map });
   }
 }
 
@@ -92,7 +103,27 @@ setTimeout(() => {
   places.forEach(e => {
     createPoint(e)
   });
+  new markerClusterer.MarkerClusterer({ markers, map });
 }, 10 * 1000);
 
 window.initMap = initMap;
 
+
+function move() {
+  var elem = document.getElementById("myBar");
+  var width = 1;
+  var id = setInterval(frame, 130);
+  function frame() {
+    if (width >= 100) {
+      clearInterval(id);
+      document.getElementById('loadbar').remove()
+      document.getElementById('map').style.opacity = 1
+    } else if (width <= 20) {
+      width = 30
+      elem.style.width = width + '%';
+    } else {
+      width++;
+      elem.style.width = width + '%';
+    }
+  }
+}
