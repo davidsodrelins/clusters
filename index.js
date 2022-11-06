@@ -1,8 +1,17 @@
 let map;
 let markers = [];
 let places = [];
+const myStyles = [
+  {
+    featureType: "poi",
+    elementType: "labels",
+    stylers: [
+      { visibility: "off" }
+    ]
+  }
+];
 
-const types = ['bar','meal_delivery','restaurant' ];
+const types = ['bar', 'meal_delivery', 'restaurant'];
 const numtypes = types.length;
 const request = {
   radius: '800',
@@ -10,9 +19,10 @@ const request = {
 };
 
 function initMap() {
-  
+
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: -13.002730, lng: -38.527716 },
+    styles: myStyles,
     zoom: 12,
   });
 
@@ -35,7 +45,6 @@ function searchPlaces(results, status, pagination) {
     if (pagination.hasNextPage) {
       pagination.nextPage();
     }
-    new markerClusterer.MarkerClusterer({ markers, map });
   }
 }
 
@@ -60,13 +69,14 @@ setTimeout(() => {
   places.forEach(e => {
     createPoint(e)
   });
+  new markerClusterer.MarkerClusterer({ markers, map });
 }, 10 * 1000);
 
 window.initMap = initMap;
 
 
 function move() {
-  var elem = document.getElementById("myBar");   
+  var elem = document.getElementById("myBar");
   var width = 1;
   var id = setInterval(frame, 130);
   function frame() {
@@ -74,12 +84,12 @@ function move() {
       clearInterval(id);
       document.getElementById('loadbar').remove()
       document.getElementById('map').style.opacity = 1
-    } else if(width <= 20){
+    } else if (width <= 20) {
       width = 30
       elem.style.width = width + '%';
     } else {
-      width++; 
-      elem.style.width = width + '%'; 
+      width++;
+      elem.style.width = width + '%';
     }
   }
 }
