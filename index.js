@@ -1,5 +1,13 @@
 let map;
 let markers = []
+let places = []
+//const types = ['bakery', 'bar', 'cafe', 'liquor_store', 'meal_delivery', 'meal_takeaway', 'night_club', 'restaurant', 'supermarket']
+const types = ['bar', 'restaurant', 'meal_delivery']
+const numtypes = types.length
+const request = {
+  radius: '800',
+  fields: ['name', 'geometry']
+};
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
@@ -7,36 +15,48 @@ function initMap() {
     zoom: 12,
   });
 
-  var request = {
-    location: new google.maps.LatLng(-13.009440, -38.492860),
-    radius: '4000',
-    type: 'restaurant',
-    fields: ['name', 'geometry'],
-  };
+  request.location = new google.maps.LatLng(-13.010652, -38.486895),
 
-  var service = new google.maps.places.PlacesService(map);
+  buscar()
+}
 
-  service.nearbySearch(request, function (results, status) {
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-      for (var i = 0; i < results.length; i++) {
-        // if(results[i].vicinity.toLowerCase().indexOf('rio vermelho') >= 0)
-        createPoint(results[i]);
-        markers.push(results[i].geometry.location);
-      }
-      map.setCenter(results[0].geometry.location);
+async function searchPlaces(results, status, pagination) {
+  if (status === google.maps.places.PlacesServiceStatus.OK) {
+    let _places = []
+    for (var i = 0; i < results.length; i++) {
+      places.push({
+        location: results[i].geometry.location,
+        name: results[i].name
+      })
     }
-  });
-
-  new MarkerClusterer({ markers, map });
+    map.setCenter(results[0].geometry.location);
+    if (pagination.hasNextPage) {
+      pagination.nextPage()
+    }
+    new markerClusterer.MarkerClusterer({ markers, map });
+  }
 }
 
 function createPoint(item) {
   let marker = new google.maps.Marker({
-    position: item.geometry.location,
+    position: item.location,
     title: item.name,
     map: map,
   });
+  markers.push(marker)
 }
 
-window.initMap = initMap;
+function buscar() {
+  var service = new google.maps.places.PlacesService(map);
+  for (let i = 0; i < numtypes; i++) {
+    request.type = types[i];
+    service.textSearch(request, searchPlaces);
+  }
+}
+setTimeout(() => {
+  places.forEach(e => {
+    createPoint(e)
+  });
+}, 10 * 1000);
 
+window.initMap = initMap;
