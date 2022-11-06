@@ -1,8 +1,9 @@
 let map;
-let markers = []
-let places = []
-const types = ['bakery', 'bar', 'cafe', 'food', 'meal_delivery', 'meal_takeaway', 'restaurant', 'supermarket']
-const numtypes = types.length
+let markers = [];
+let places = [];
+
+const types = ['bar','meal_delivery','restaurant' ];
+const numtypes = types.length;
 const request = {
   radius: '800',
   fields: ['name', 'geometry']
@@ -16,12 +17,12 @@ function initMap() {
 
   request.location = new google.maps.LatLng(-13.010652, -38.486895),
 
-  buscar()
+  buscar();
 }
 
 async function searchPlaces(results, status, pagination) {
   if (status === google.maps.places.PlacesServiceStatus.OK) {
-    let _places = []
+    let _places = [];
     for (var i = 0; i < results.length; i++) {
       places.push({
         location: results[i].geometry.location,
@@ -30,7 +31,7 @@ async function searchPlaces(results, status, pagination) {
     }
     map.setCenter(results[0].geometry.location);
     if (pagination.hasNextPage) {
-      pagination.nextPage()
+      pagination.nextPage();
     }
     new markerClusterer.MarkerClusterer({ markers, map });
   }
@@ -41,10 +42,9 @@ function createPoint(item) {
     position: item.location,
     title: item.name,
     map: map,
-    // icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
-    icon: "https://www.iconpacks.net/icons/1/free-pin-icon-48-thumb.png",
+    icon: "img/icon/pinblack.png",
   });
-  markers.push(marker)
+  markers.push(marker);
 }
 
 function buscar() {
